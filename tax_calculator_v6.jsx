@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, AreaChart, Area, CartesianGrid, Legend, Line } from "recharts";
+import { Settings, Briefcase, Building2, CreditCard, TrendingUp, Home, DollarSign, LayoutList, Landmark, BarChart2, Telescope, Waves, CheckCircle, AlertTriangle, PiggyBank } from "lucide-react";
 
 const TAX_DATA = {
   2024: {
@@ -219,8 +220,8 @@ function RRow({label,val,bold,color,sub}) {
 function SHead({label}) {
   return <div style={{fontSize:9,color:ACCENT,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",padding:"6px 0 2px",marginTop:4,borderBottom:`1px solid ${ACCENT}44`}}>{label}</div>;
 }
-function TabBtn({id,label,active,onClick}) {
-  return <button onClick={()=>onClick(id)} style={{padding:"6px 12px",borderRadius:7,border:"none",cursor:"pointer",fontSize:12,fontWeight:500,background:active?ACCENT:"transparent",color:active?"white":MUTED}}>{label}</button>;
+function TabBtn({id,label,icon,active,onClick}) {
+  return <button onClick={()=>onClick(id)} style={{padding:"6px 12px",borderRadius:7,border:"none",cursor:"pointer",fontSize:12,fontWeight:500,background:active?ACCENT:"transparent",color:active?"white":MUTED,display:"flex",alignItems:"center",gap:5}}>{icon}{label}</button>;
 }
 function SLabel({children}) {
   return <div style={{fontSize:10,color:ACCENT,fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",margin:"12px 0 6px",paddingBottom:3,borderBottom:`1px solid ${ACCENT}33`}}>{children}</div>;
@@ -421,40 +422,40 @@ export default function App() {
 
       {/* ── SIDEBAR ── */}
       <div style={{width:240,minWidth:240,background:CARD,borderRight:`1px solid ${BORDER}`,overflowY:"auto",padding:"14px 12px",flexShrink:0}}>
-        <div style={{fontSize:15,fontWeight:800,color:ACCENT,marginBottom:14}}>⚙ Settings</div>
+        <div style={{fontSize:15,fontWeight:800,color:ACCENT,marginBottom:14,display:"flex",alignItems:"center",gap:6}}><Settings size={15}/>Settings</div>
         <SLabel>General</SLabel>
         <SField label="Tax Year" val={year} onChange={v=>{setYear(+v);setState(Object.keys(TAX_DATA[+v].states)[0]);}} opts={[2026,2025,2024]}/>
         <SField label="State" val={state} onChange={setState} opts={states}/>
-        <SLabel>💼 Primary Income</SLabel>
+        <SLabel><Briefcase size={10} style={{marginRight:4}}/>Primary Income</SLabel>
         <FInput label="Gross Income" val={pGrossV} freq={pGrossF} setVal={setPGrossV} setFreq={setPGrossF}/>
         <FInput label="Longevity Pay" val={pLonV} freq={pLonF} setVal={setPLonV} setFreq={setPLonF}/>
         <SField label="Pay Frequency" val={ppFreq} onChange={setPpFreq} opts={Object.keys(PAY_FREQS)}/>
         <FInput label="Additional Federal Withholding" val={addWithV} freq={addWithF} setVal={setAddWithV} setFreq={setAddWithF} ppY={ppY}/>
         <SField label="UTSW Plan" val={plan} onChange={setPlan} opts={["TRS","ORP"]}/>
-        <SLabel>💼 Secondary Income</SLabel>
+        <SLabel><Briefcase size={10} style={{marginRight:4}}/>Secondary Income</SLabel>
         <label style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:MUTED,marginBottom:6,cursor:"pointer"}}>
           <input type="checkbox" checked={hasSec} onChange={e=>setHasSec(e.target.checked)}/> Have secondary income
         </label>
         {hasSec&&<FInput label="Secondary Gross" val={sGrossV} freq={sGrossF} setVal={setSGrossV} setFreq={setSGrossF}/>}
-        <SLabel>🏦 Pre-Tax Retirement</SLabel>
+        <SLabel><Building2 size={10} style={{marginRight:4}}/>Pre-Tax Retirement</SLabel>
         <FInput label="Other Work Contributions" val={wOtherV} freq={wOtherF} setVal={setWOtherV} setFreq={setWOtherF} ppY={ppY}/>
         <FInput label={`Trad 401k/403b (lim $${td.lim_401k.toLocaleString()})`} val={t401V} freq={t401F} setVal={setT401V} setFreq={setT401F} ppY={ppY}/>
         <FInput label={`Trad 457b (lim $${td.lim_401k.toLocaleString()})`} val={t457V} freq={t457F} setVal={setT457V} setFreq={setT457F} ppY={ppY}/>
         <FInput label={`Trad IRA (lim $${td.lim_ira.toLocaleString()})`} val={tIraV} freq={tIraF} setVal={setTIraV} setFreq={setTIraF}/>
-        <SLabel>💳 Pre-Tax Expenses</SLabel>
+        <SLabel><CreditCard size={10} style={{marginRight:4}}/>Pre-Tax Expenses</SLabel>
         <FInput label="Medical" val={medV} freq={medF} setVal={setMedV} setFreq={setMedF} ppY={ppY}/>
         <FInput label="Dental" val={denV} freq={denF} setVal={setDenV} setFreq={setDenF} ppY={ppY}/>
         <FInput label="Vision" val={visV} freq={visF} setVal={setVisV} setFreq={setVisF} ppY={ppY}/>
         <FInput label="Parking" val={parkV} freq={parkF} setVal={setParkV} setFreq={setParkF} ppY={ppY}/>
         <FInput label="FSA" val={fsaV} freq={fsaF} setVal={setFsaV} setFreq={setFsaF}/>
         <FInput label="Other Pre-Tax" val={ptOV} freq={ptOF} setVal={setPtOV} setFreq={setPtOF} ppY={ppY}/>
-        <SLabel>📈 Post-Tax Contributions</SLabel>
+        <SLabel><TrendingUp size={10} style={{marginRight:4}}/>Post-Tax Contributions</SLabel>
         <FInput label={`Roth 401k/403b (lim $${td.lim_401k.toLocaleString()})`} val={r401V} freq={r401F} setVal={setR401V} setFreq={setR401F} ppY={ppY}/>
         <FInput label={`Roth 457b (lim $${td.lim_401k.toLocaleString()})`} val={r457V} freq={r457F} setVal={setR457V} setFreq={setR457F} ppY={ppY}/>
         <FInput label={`Roth IRA (lim $${td.lim_ira.toLocaleString()})`} val={rIraV} freq={rIraF} setVal={setRIraV} setFreq={setRIraF}/>
         <FInput label="Investments / Savings" val={invV} freq={invF} setVal={setInvV} setFreq={setInvF} ppY={ppY}/>
         <FInput label="Other Post-Tax" val={ptO2V} freq={ptO2F} setVal={setPtO2V} setFreq={setPtO2F} ppY={ppY}/>
-        <SLabel>🏠 Living Expenses</SLabel>
+        <SLabel><Home size={10} style={{marginRight:4}}/>Living Expenses</SLabel>
         <FInput label="Rent / Mortgage" val={rentV} freq={rentF} setVal={setRentV} setFreq={setRentF} ppY={ppY}/>
         <FInput label="Groceries" val={grocV} freq={grocF} setVal={setGrocV} setFreq={setGrocF} ppY={ppY}/>
         <FInput label="Car Insurance" val={carIV} freq={carIF} setVal={setCarIV} setFreq={setCarIF} ppY={ppY}/>
@@ -486,7 +487,7 @@ export default function App() {
         {/* Header row */}
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
           <div>
-            <div style={{fontSize:20,fontWeight:800,letterSpacing:"-0.02em"}}>💰 Tax Calculator</div>
+            <div style={{fontSize:20,fontWeight:800,letterSpacing:"-0.02em",display:"flex",alignItems:"center",gap:8}}><DollarSign size={20}/>Tax Calculator</div>
             <div style={{fontSize:11,color:MUTED}}>{year} · {state} · {ppFreq}{hasSec?" · +Secondary":""}</div>
           </div>
           <div style={{display:"flex",gap:8,alignItems:"center"}}>
@@ -502,7 +503,7 @@ export default function App() {
             {/* Contributions pill */}
             <div style={{padding:"6px 12px",borderRadius:10,fontSize:11,fontWeight:700,background:R.contribOk?"#064e3b":"#7f1d1d",color:R.contribOk?GREEN:RED,border:`1px solid ${R.contribOk?GREEN:RED}`,textAlign:"center"}}>
               <div style={{fontSize:9,color:MUTED,letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:2}}>Contributions</div>
-              {R.contribOk?"✓ Within Limits":"⚠ Over Limit"}
+              {R.contribOk?<span style={{display:"flex",alignItems:"center",gap:4}}><CheckCircle size={11}/>Within Limits</span>:<span style={{display:"flex",alignItems:"center",gap:4}}><AlertTriangle size={11}/>Over Limit</span>}
             </div>
           </div>
         </div>
@@ -519,8 +520,8 @@ export default function App() {
 
         {/* Tabs */}
         <div style={{display:"flex",gap:3,marginBottom:14,background:CARD,padding:4,borderRadius:9,width:"fit-content",border:`1px solid ${BORDER}`}}>
-          {[["breakdown","📋 Breakdown"],["paycheck","💵 Paycheck"],["savings","💰 Savings & Retirement"],["pension","🏛 Pension"],["networth","📊 Net Worth"],["predict","🔮 Predictor"]].map(([id,lbl])=>
-            <TabBtn key={id} id={id} label={lbl} active={tab===id} onClick={setTab}/>
+          {[["breakdown","Breakdown",<LayoutList size={12}/>],["paycheck","Paycheck",<DollarSign size={12}/>],["savings","Savings & Retirement",<PiggyBank size={12}/>],["pension","Pension",<Landmark size={12}/>],["networth","Net Worth",<BarChart2 size={12}/>],["predict","Predictor",<Telescope size={12}/>]].map(([id,lbl,icon])=>
+            <TabBtn key={id} id={id} label={lbl} icon={icon} active={tab===id} onClick={setTab}/>
           )}
         </div>
 
@@ -621,7 +622,7 @@ export default function App() {
 
             {/* Waterfall */}
             <div style={card_style}>
-              <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:10}}>💧 Income Waterfall (Annual Combined)</div>
+              <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:10,display:"flex",alignItems:"center",gap:6}}><Waves size={12}/>Income Waterfall (Annual Combined)</div>
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={wfData} margin={{top:5,right:10,left:0,bottom:5}}>
                   <XAxis dataKey="n" tick={{fill:MUTED,fontSize:10}} axisLine={false} tickLine={false}/>
@@ -723,7 +724,7 @@ export default function App() {
                 ):<div style={{color:MUTED,fontSize:11,marginTop:8}}>Enter contributions to see chart.</div>}
               </div>
               <div style={card_style}>
-                <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:10}}>📈 Savings Projection</div>
+                <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:10,display:"flex",alignItems:"center",gap:6}}><TrendingUp size={12}/>Savings Projection</div>
                 <div style={{marginBottom:8}}><div style={{fontSize:10,color:MUTED,marginBottom:3}}>Years: {pYears}</div><input type="range" min={5} max={40} value={pYears} onChange={e=>setPYears(+e.target.value)} style={{width:"100%",accentColor:ACCENT}}/></div>
                 <div style={{marginBottom:8}}><div style={{fontSize:10,color:MUTED,marginBottom:3}}>Base Return: {pRate}% · Band: ±3%</div><input type="range" min={1} max={15} value={pRate} onChange={e=>setPRate(+e.target.value)} style={{width:"100%",accentColor:ACCENT}}/></div>
                 <div style={{marginBottom:10}}><div style={{fontSize:10,color:MUTED,marginBottom:3}}>Starting Balance</div><input type="number" min={0} value={initBal} onChange={e=>setInitBal(+e.target.value)} style={inp_style}/></div>
@@ -751,7 +752,7 @@ export default function App() {
         {tab==="pension"&&(
           <div>
             <div style={{...card_style,marginBottom:12}}>
-              <div style={{fontSize:13,fontWeight:700,color:ACCENT,marginBottom:4}}>🏛 TRS / ORP Pension Estimator</div>
+              <div style={{fontSize:13,fontWeight:700,color:ACCENT,marginBottom:4,display:"flex",alignItems:"center",gap:6}}><Landmark size={13}/>TRS / ORP Pension Estimator</div>
               <div style={{fontSize:11,color:MUTED,marginBottom:14}}>TRS pension = Average of top 5 salaries × Years of Service × Multiplier %</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
                 <div>
@@ -829,13 +830,13 @@ export default function App() {
           <div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
               <div style={card_style}>
-                <div style={{fontSize:12,fontWeight:700,color:GREEN,marginBottom:8}}>💚 Assets</div>
+                <div style={{fontSize:12,fontWeight:700,color:GREEN,marginBottom:8,display:"flex",alignItems:"center",gap:6}}><TrendingUp size={12}/>Assets</div>
                 {[["Checking / Savings",nwCheck,setNwCheck],["High-Yield Savings",nwHys,setNwHys],["401k / 403b Balance",nw401,setNw401],["457b Balance",nw457,setNw457],["IRA Balance",nwIra,setNwIra],["Brokerage / Investments",nwBrok,setNwBrok],["Home Value",nwHome,setNwHome],["Vehicle Value",nwCar,setNwCar],["Other Assets",nwOA,setNwOA]].map(([lbl,v,sv])=>(
                   <div key={lbl} style={{marginBottom:6}}><div style={{fontSize:10,color:MUTED,marginBottom:2}}>{lbl}</div><input type="number" min={0} value={v} onChange={e=>sv(+e.target.value)} style={inp_style}/></div>
                 ))}
               </div>
               <div style={card_style}>
-                <div style={{fontSize:12,fontWeight:700,color:RED,marginBottom:8}}>🔴 Liabilities</div>
+                <div style={{fontSize:12,fontWeight:700,color:RED,marginBottom:8,display:"flex",alignItems:"center",gap:6}}><AlertTriangle size={12}/>Liabilities</div>
                 {[["Mortgage Balance",nwMort,setNwMort],["Car Loan",nwCL,setNwCL],["Student Loans",nwStu,setNwStu],["Credit Card Debt",nwCC,setNwCC],["Other Debt",nwOD,setNwOD]].map(([lbl,v,sv])=>(
                   <div key={lbl} style={{marginBottom:6}}><div style={{fontSize:10,color:MUTED,marginBottom:2}}>{lbl}</div><input type="number" min={0} value={v} onChange={e=>sv(+e.target.value)} style={inp_style}/></div>
                 ))}
