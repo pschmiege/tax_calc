@@ -2,7 +2,7 @@
 // Unauthorized copying, modification, or distribution of this software is prohibited.
 import { useState, useMemo, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, AreaChart, Area, CartesianGrid, Legend, Line } from "recharts";
-import { Settings, Briefcase, Building2, CreditCard, TrendingUp, Home, DollarSign, LayoutList, Landmark, BarChart2, Telescope, Waves, CheckCircle, AlertTriangle, PiggyBank } from "lucide-react";
+import { Settings, Briefcase, Building2, CreditCard, TrendingUp, Home, DollarSign, LayoutList, Landmark, BarChart2, Telescope, CheckCircle, AlertTriangle, PiggyBank } from "lucide-react";
 
 const TAX_DATA = {
   2024: {
@@ -408,6 +408,12 @@ export default function App() {
     {n:"−Post Ret",v:R.postRet,fill:ACCENT},{n:"−Invest",v:R.postInv,fill:TEAL},
     {n:"−Living",v:R.living,fill:"#60a5fa"},{n:"Remaining",v:Math.max(0,R.cFinal),fill:GREEN},
   ];
+  const breakdownPie=[
+    {n:"Remaining",v:Math.max(0,R.cFinal),fill:GREEN},{n:"Taxes",v:R.cTotTax,fill:RED},
+    {n:"Pre-Tax Ret",v:R.preTaxRet,fill:PURPLE},{n:"Pre-Tax Exp",v:R.preTaxExp,fill:ORANGE},
+    {n:"Post Ret",v:R.postRet,fill:ACCENT},{n:"Investments",v:R.postInv,fill:TEAL},
+    {n:"Living",v:R.living,fill:"#60a5fa"},
+  ].filter(d=>d.v>0);
   const donutData=[
     {n:"Remaining",v:Math.max(0,R.pc_final),fill:GREEN},{n:"Taxes",v:R.pc_totTax,fill:RED},
     {n:"Pre-Tax Ret",v:R.pc_preTaxRet,fill:PURPLE},{n:"Pre-Tax Exp",v:R.pc_preTaxExp,fill:ORANGE},
@@ -530,7 +536,7 @@ export default function App() {
         {/* ── BREAKDOWN ── */}
         {tab==="breakdown"&&(
           <div>
-            <div style={{display:"grid",gridTemplateColumns:hasSec?"1fr 1fr 1fr":"1fr",gap:10,marginBottom:12}}>
+            <div style={{display:"grid",gridTemplateColumns:hasSec?"1fr 1fr":"1fr 1fr",gap:10,marginBottom:12}}>
               {/* Primary */}
               <div style={card_style}>
                 <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:6}}>Primary Employment</div>
@@ -562,8 +568,19 @@ export default function App() {
                 <RRow label="Final" val={fm(R.pFinal)} bold color={R.pFinal>=0?GREEN:RED}/>
               </div>
 
+              {/* Pie Chart */}
+              <div style={card_style}>
+                <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:10}}>Annual Breakdown</div>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart><Pie data={breakdownPie} cx="50%" cy="50%" innerRadius={70} outerRadius={120} dataKey="v" nameKey="n">{breakdownPie.map((d,i)=><Cell key={i} fill={d.fill}/>)}</Pie><Tooltip {...tt}/><Legend iconType="circle" iconSize={8} formatter={v=><span style={{color:MUTED,fontSize:10}}>{v}</span>}/></PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Secondary & Combined — only when secondary income is enabled */}
+            {hasSec&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               {/* Secondary */}
-              {hasSec&&<div style={card_style}>
+              <div style={card_style}>
                 <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:6}}>Secondary Employment</div>
                 <SHead label="Income"/>
                 <RRow label="Gross Income" val={fm(R.sGross)} bold/>
@@ -581,10 +598,10 @@ export default function App() {
                 <RRow label="Total Tax (withheld)" val={fm(R.sTotTax)} bold color={RED}/>
                 <SHead label="After Tax"/>
                 <RRow label="Final (after tax)" val={fm(R.sFinal)} bold color={R.sFinal>=0?GREEN:RED}/>
-              </div>}
+              </div>
 
               {/* Combined */}
-              {hasSec&&<div style={card_style}>
+              <div style={card_style}>
                 <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:6}}>Combined (Filing Analysis)</div>
                 <SHead label="Income"/>
                 <RRow label="Combined Gross" val={fm(R.cGross)} bold/>
@@ -617,20 +634,8 @@ export default function App() {
                 <RRow label="Investments" val={fm(-R.postInv)} sub/>
                 <RRow label="Living Expenses" val={fm(-R.living)} sub/>
                 <RRow label="Final" val={fm(R.cFinal)} bold color={R.cFinal>=0?GREEN:RED}/>
-              </div>}
-            </div>
-
-            {/* Waterfall */}
-            <div style={card_style}>
-              <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:10,display:"flex",alignItems:"center",gap:6}}><Waves size={12}/>Income Waterfall (Annual Combined)</div>
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={wfData} margin={{top:5,right:10,left:0,bottom:5}}>
-                  <XAxis dataKey="n" tick={{fill:MUTED,fontSize:10}} axisLine={false} tickLine={false}/>
-                  <YAxis tick={{fill:MUTED,fontSize:10}} axisLine={false} tickLine={false} tickFormatter={v=>`$${(v/1000).toFixed(0)}k`}/>
-                  <Tooltip {...tt}/><Bar dataKey="v" radius={[4,4,0,0]}>{wfData.map((d,i)=><Cell key={i} fill={d.fill}/>)}</Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+              </div>
+            </div>}
           </div>
         )}
 
