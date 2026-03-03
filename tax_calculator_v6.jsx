@@ -87,7 +87,8 @@ function calcAll(s) {
   const pFedTaxable = Math.max(0, pAgi - td.std_ded);
   const [pFedTax, pMargFed] = bracketTax(pFedTaxable, td.fed);
   const pFica = Math.min(s.pGross + s.pLon, td.fica_base) * td.fica;
-  const pMedi = (s.pGross + s.pLon) * td.medicare;
+  const pMediWages = s.pGross + s.pLon;
+  const pMedi = pMediWages * td.medicare + Math.max(0, pMediWages - 200000) * 0.009; // +0.9% above $200k
   // addWith is additional withholding — this is extra money withheld toward tax bill
   const pWithheld = pFedTax + pFica + pMedi + s.addWith; // total actually withheld from paychecks
   const [pStateTax, pMargState] = bracketTax(Math.max(0, pAgi - st.ded), st.b);
@@ -100,7 +101,7 @@ function calcAll(s) {
   const sFedTaxable = Math.max(0, sG - td.std_ded);
   const [sFedTax, sMargFed] = bracketTax(sFedTaxable, td.fed);
   const sFica = Math.min(sG, td.fica_base) * td.fica;
-  const sMedi = sG * td.medicare;
+  const sMedi = sG * td.medicare + Math.max(0, sG - 200000) * 0.009; // +0.9% above $200k
   const sTotFedWithheld = sFedTax + sFica + sMedi;
   const [sStateTax] = bracketTax(Math.max(0, sG - st.ded), st.b);
   const sTotTax = sTotFedWithheld + sStateTax;
@@ -120,7 +121,7 @@ function calcAll(s) {
   const cFedTaxable = Math.max(0, cAgi - td.std_ded);
   const [cFedTaxOwed] = bracketTax(cFedTaxable, td.fed); // actual federal income tax owed on combined income
   const cFicaOwed = Math.min(s.pGross + s.pLon + sG, td.fica_base) * td.fica; // FICA capped across both
-  const cMediOwed = (s.pGross + s.pLon + sG) * td.medicare;
+  const cMediOwed = (s.pGross + s.pLon + sG) * td.medicare + Math.max(0, s.pGross + s.pLon + sG - 200000) * 0.009; // +0.9% above $200k on combined wages
   const [cStateTaxOwed] = bracketTax(Math.max(0, cAgi - st.ded), st.b);
   const cTotOwed = cFedTaxOwed + cFicaOwed + cMediOwed + cStateTaxOwed;
 
