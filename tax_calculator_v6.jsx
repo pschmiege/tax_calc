@@ -640,7 +640,7 @@ export default function App() {
         {tab==="paycheck"&&(
           <div>
             <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
-              <Met label="Gross / Paycheck" val={fm(R.pc_gross)}/><Met label="Withheld / Paycheck" val={fm(R.pc_totTax)} color={RED}/><Met label="Net / Paycheck" val={fm(R.pc_net)} color={GREEN}/><Met label="Remaining / Paycheck" val={fm(R.pc_final)} color={R.pc_final>=0?GREEN:RED}/>
+              <Met label="Gross / Paycheck" val={fm(R.pc_gross)}/><Met label="Taxes / Paycheck" val={fm(R.pc_totTax)} color={RED}/><Met label="Net / Paycheck" val={fm(R.pc_net)} color={GREEN}/><Met label="Remaining / Paycheck" val={fm(R.pc_final)} color={R.pc_final>=0?GREEN:RED}/>
               {hasSec&&<><Met label="2nd Gross / Check" val={fm(R.sGross/ppY)}/><Met label="2nd Net / Check" val={fm(R.sFinal/ppY)} color={GREEN}/></>}
             </div>
             <div style={{display:"grid",gridTemplateColumns:hasSec?"1fr 1fr 1fr":"1fr 1fr",gap:10}}>
@@ -652,13 +652,13 @@ export default function App() {
                 <RRow label="Pre-Tax Expenses" val={fm(-R.pc_preTaxExp)} sub/>
                 <RRow label="Adjusted Gross Income" val={fm(R.pAgi/ppY)} bold color={ACCENT}/>
                 <RRow label="Fed Taxable Gross" val={fm(R.pFedTaxable/ppY)} bold color={ACCENT}/>
-                <SHead label="Withheld"/>
+                <SHead label="Taxes"/>
                 <RRow label="Federal Income Tax" val={fm(R.pc_fedTax)} sub/>
                 <RRow label="Medicare" val={fm(R.pc_medi)} sub/>
                 <RRow label="FICA / OASDI" val={fm(R.pc_fica)} sub/>
-                <RRow label="Total Federal Withheld" val={fm(R.pc_withheld)} bold color={RED}/>
+                <RRow label="Total Federal" val={fm(R.pc_withheld)} bold color={RED}/>
                 <RRow label="State Tax" val={fm(R.pc_stateTax)} sub/>
-                <RRow label="Total Withheld" val={fm(R.pc_totTax)} bold color={RED}/>
+                <RRow label="Total Taxes" val={fm(R.pc_totTax)} bold color={RED}/>
                 <SHead label="After Tax"/>
                 <RRow label="Net" val={fm(R.pc_net)} bold/>
                 <RRow label="Post-Tax Retirement" val={fm(-R.pc_postRet)} sub/>
@@ -671,13 +671,13 @@ export default function App() {
                   <div style={{fontSize:12,fontWeight:700,color:ACCENT,marginBottom:6}}>Per Paycheck · Secondary (est. {ppFreq})</div>
                   <SHead label="Income"/>
                   <RRow label="Gross" val={fm(R.sGross/ppY)} bold/>
-                  <SHead label="Withheld (estimated)"/>
+                  <SHead label="Taxes (estimated)"/>
                   <RRow label="Federal Income Tax" val={fm(R.sFedTax/ppY)} sub/>
                   <RRow label="Medicare" val={fm(R.sMedi/ppY)} sub/>
                   <RRow label="FICA / OASDI" val={fm(R.sFica/ppY)} sub/>
-                  <RRow label="Total Federal Withheld" val={fm(R.sTotFedWithheld/ppY)} bold color={RED}/>
+                  <RRow label="Total Federal" val={fm(R.sTotFedWithheld/ppY)} bold color={RED}/>
                   <RRow label="State Tax" val={fm(R.sStateTax/ppY)} sub/>
-                  <RRow label="Total Withheld" val={fm(R.sTotTax/ppY)} bold color={RED}/>
+                  <RRow label="Total Taxes" val={fm(R.sTotTax/ppY)} bold color={RED}/>
                   <SHead label="After Tax"/>
                   <RRow label="Net (after tax)" val={fm(R.sFinal/ppY)} bold color={R.sFinal>=0?GREEN:RED}/>
                   <div style={{fontSize:9,color:MUTED,marginTop:8}}>* Uses primary pay frequency as estimate</div>
